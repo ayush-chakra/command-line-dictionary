@@ -5,9 +5,9 @@ class ApiClient {
     constructor(word) {
         this.word = word;
     }
-    async getWordInformation() {
+    async getWordInformation(word) {
         try {
-            const response = await axios.get(`https://api.dictionaryapi.dev/api/v2/entries/en/${this.word}`);
+            const response = await axios.get(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`);
             return response.data;
         } catch (error) {
             console.error(error);
