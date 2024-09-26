@@ -23,6 +23,10 @@ class CommandHandler {
 
         const wordData = await apiClient.getWordInformation(word);
 
+        if (!wordData) {
+            return;
+        }
+
         // handling commands here
         switch (command) {
             case 'def':
@@ -52,6 +56,10 @@ class CommandHandler {
         const wordGame = new WordGame();
         // fetch a random word
         wordGame.word = await apiClient.getRandomWord();
+        if (!wordGame.word) {
+            wordGame.readline.close();
+            return;
+        }
         const wordInformation = await apiClient.getWordInformation(wordGame.word);
 
         let allSynonyms = this.getFormattedDataForEachCommand(wordInformation, 'Synonyms');
