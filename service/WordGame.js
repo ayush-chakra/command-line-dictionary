@@ -7,9 +7,9 @@ class WordGame {
     synonyms;
     readline;
     eventEmitter;
-    constructor(word, hints, synonyms, eventEmitter) {
+    constructor(word, hints, synonym, eventEmitter) {
         this.word = word;
-        this.synonyms = synonyms;
+        this.nonDisplaySynonym = synonym;
         this.wordHints = hints;
         this.eventEmitter = eventEmitter;
 
@@ -27,7 +27,7 @@ class WordGame {
 
         this.readline.question('Enter your answer: ', (input) =>  {
             if (input.toLocaleLowerCase() === this.word.toLocaleLowerCase() 
-                || this.synonyms.map((syn)=> syn.toLocaleLowerCase()).includes(input.toLocaleLowerCase())) {
+                || this.nonDisplaySynonym?.toLocaleLowerCase() == input.toLocaleLowerCase()) {
                 console.log('Correct answer!');
                 this.readline.close();
             } else {
