@@ -50,16 +50,16 @@ class CommandHandler {
                 wordGame.startGame();
                 wordGame.synonyms = this.getFormattedDataForEachCommand(wordInformation, 'Synonyms');
                 wordGame.eventEmitter = eventEmitter;
+
+                // eventEmitter to catch the event from WordGame.js and display full dict on exit
+                eventEmitter.on('full', (word) => {
+                    console.log(`The word was "${word}".`);
+                    this.printFullData(wordInformation, word);
+                })
                 break;
             default:
                 console.log('Unknown command:', command);
         }
-        // eventEmitter to catch the event from WordGame.js and display full dict on exit
-        eventEmitter.on('full', (word) => {
-            console.log(`The word was "${word}".`);
-           this.printFullData(wordData, word);
-        })
-
     }
 
     jumbleWord(word) {
