@@ -16,6 +16,7 @@ Run the following command at the root of your project:
 3. `node . ant <word>` --> Show antonyms for word.
 4. `node . ex <word>` --> Show examples for word.
 5. `node . <word>` --> Show all the details for word.
+6. `node .` --> Pick a random word and show all the details.
 6. `node . play` --> Start a word game.
 
 
