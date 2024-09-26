@@ -41,41 +41,52 @@ class CommandHandler {
                 this.printFullData(wordData, word);
                 break;
             case 'play':
-                const wordGame = new WordGame();
-                // fetch a random word
-                wordGame.word = await apiClient.getRandomWord();
-                const wordInformation = await apiClient.getWordInformation(wordGame.word);
-
-                let allSynonyms = this.getFormattedDataForEachCommand(wordInformation, 'Synonyms');
-                wordGame.nonDisplaySynonym = allSynonyms[Math.floor(Math.random() * allSynonyms.length )];
-
-                wordGame.wordHints = this.getHintsForWord(wordInformation, wordGame.word)
-                                            .filter(text => text !== wordGame.nonDisplaySynonym);
-                wordGame.startGame();
-                wordGame.eventEmitter = eventEmitter;
-
-                // eventEmitter to catch the event from WordGame.js and display full dict on exit
-                eventEmitter.on('full', (word) => {
-                    console.log(`The word was "${word}".`);
-                    this.printFullData(wordInformation, word);
-                })
+                this.startWordGame();
                 break;
             default:
                 console.log('Unknown command:', command);
         }
     }
 
+    async startWordGame() {
+        const wordGame = new WordGame();
+        // fetch a random word
+        wordGame.word = await apiClient.getRandomWord();
+        const wordInformation = await apiClient.getWordInformation(wordGame.word);
+
+        let allSynonyms = this.getFormattedDataForEachCommand(wordInformation, 'Synonyms');
+        wordGame.nonDisplaySynonym = allSynonyms[Math.floor(Math.random() * allSynonyms.length )];
+
+        wordGame.wordHints = this.getHintsForWord(wordInformation, wordGame.word)
+                                    .filter(text => text !== wordGame.nonDisplaySynonym);
+        wordGame.startGame();
+        wordGame.eventEmitter = eventEmitter;
+
+        // eventEmitter to catch the event from WordGame.js and display full dict on exit
+        eventEmitter.on('full', (word) => {
+            console.log(`The word was "${word}".`);
+            this.printFullData(wordInformation, word);
+        })
+    }
+
     jumbleWord(word) {
-        const jumbledWord = word.split('').sort(() => Math.random() - 0.5).join('');
-        // calling recursive, because multiple times the jumbled word was same as answer
-        return jumbledWord == word ? this.jumbleWord(jumbledWord) : jumbledWord;
+        const jumbledWord = word.split('');
+
+        for(var i = jumbledWord.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = jumbledWord[i];
+            jumbledWord[i] = jumbledWord[j];
+            jumbledWord[j] = tmp;
+        }
+        return jumbledWord.join("");
     }
 
     getHintsForWord(wordInformation, word) {
         const hints = [
             ...this.getFormattedDataForEachCommand(wordInformation, 'Definitions'),
             ...this.getFormattedDataForEachCommand(wordInformation, 'Synonyms'),
-            ...this.getFormattedDataForEachCommand(wordInformation, 'Antonyms')
+            ...this.getFormattedDataForEachCommand(wordInformation, 'Antonyms'),
+            this.jumbleWord(word)
         ];
 
         return hints;
