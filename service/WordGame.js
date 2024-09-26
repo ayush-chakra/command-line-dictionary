@@ -54,6 +54,10 @@ class WordGame {
                     this.eventEmitter.emit('full', this.word);
                     readline.close();
                     break;
+                default:
+                    console.log('Unknown command');
+                    this.showOptions(this.readline);
+                    break;
             }
         });
     }
