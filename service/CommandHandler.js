@@ -46,9 +46,12 @@ class CommandHandler {
                 wordGame.word = await apiClient.getRandomWord();
                 const wordInformation = await apiClient.getWordInformation(wordGame.word);
 
-                wordGame.wordHints = this.getHintsForWord(wordInformation, wordGame.word);
+                let allSynonyms = this.getFormattedDataForEachCommand(wordInformation, 'Synonyms');
+                wordGame.nonDisplaySynonym = allSynonyms[Math.floor(Math.random() * allSynonyms.length )];
+
+                wordGame.wordHints = this.getHintsForWord(wordInformation, wordGame.word)
+                                            .filter(text => text !== wordGame.nonDisplaySynonym);
                 wordGame.startGame();
-                wordGame.synonyms = this.getFormattedDataForEachCommand(wordInformation, 'Synonyms');
                 wordGame.eventEmitter = eventEmitter;
 
                 // eventEmitter to catch the event from WordGame.js and display full dict on exit
