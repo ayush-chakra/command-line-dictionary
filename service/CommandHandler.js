@@ -16,13 +16,13 @@ class CommandHandler {
             command = 'full';
             console.log(`Random Word: ${word}`);
         }
-        if (command !== 'play') {
+        if (commandArgs.length === 1 && command !== 'play') {
             word = command;
             command = 'full';
         }
 
         const wordData = await apiClient.getWordInformation(word);
-        
+
         // handling commands here
         switch (command) {
             case 'def':
