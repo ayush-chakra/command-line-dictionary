@@ -11,7 +11,8 @@ class ApiClient {
             const response = await axios.get(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`);
             return response.data;
         } catch (error) {
-            throw new Error('No definition found, please try again!');
+            console.error('No details found, please try again!');
+            return;
         }
     }
 
@@ -20,7 +21,8 @@ class ApiClient {
             const response = await axios.get('https://random-word-api.vercel.app/api?words=1');
             return response.data[0];
         } catch (error) {
-           throw new Error('Failed to fetch a random word!');
+            console.error('Coud not get a random word, please try again!');
+            return;
         }
     }
 }
